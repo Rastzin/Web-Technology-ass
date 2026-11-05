@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>number guesser</title>
+<style>
+body {
+  font-family: Georgia, serif;
+  background: #f3ead7;
+  color: #3b2f2f;
+  max-width: 340px;
+  margin: 60px auto;
+}
+
+h1 {
+  font-size: 28px;
+  border-bottom: 2px solid #3b2f2f;
+  padding-bottom: 6px;
+}
+
+input {
+  font-size: 18px;
+  width: 80px;
+  padding: 4px;
+  border: 2px solid #3b2f2f;
+  background: #fffaf0;
+}
+
+button {
+  font-family: inherit;
+  font-size: 16px;
+  padding: 5px 12px;
+  border: 2px solid #3b2f2f;
+  background: #d9822b;
+  cursor: pointer;
+}
+
+#hint {
+  font-style: italic;
+  min-height: 24px;
+}
+</style>
+</head>
+<body>
+
+<h1>number guesser</h1>
+<p>I'm thinking of a number from 1 to 100.</p>
+
+<input id="box" type="number">
+<button id="go">guess</button>
+
+<p id="hint"></p>
+<p>tries so far: <span id="count">0</span></p>
+
+<button id="reset">start over</button>
+
+<script>
+var answer;
+var count;
+
+function startOver() {
+  answer = Math.floor(Math.random() * 100) + 1;
+  count = 0;
+  document.getElementById('count').textContent = 0;
+  document.getElementById('hint').textContent = '';
+  document.getElementById('box').value = '';
+  document.getElementById('box').disabled = false;
+  document.getElementById('go').disabled = false;
+}
+
+function tryGuess() {
+  var hint = document.getElementById('hint');
+  var n = Number(document.getElementById('box').value);
+
+  // empty box or number outside the range doesn't count
+  if (document.getElementById('box').value === '' || n < 1 || n > 100) {
+    hint.textContent = 'pick something between 1 and 100';
+    return;
+  }
+
+  count++;
+  document.getElementById('count').textContent = count;
+
+  if (n < answer) {
+    hint.textContent = 'too low';
+  } else if (n > answer) {
+    hint.textContent = 'too high';
+  } else {
+    hint.textContent = 'got it in ' + count + ' tries!';
+    document.getElementById('box').disabled = true;
+    document.getElementById('go').disabled = true;
+  }
+}
+
+document.getElementById('go').onclick = tryGuess;
+document.getElementById('reset').onclick = startOver;
+document.getElementById('box').onkeydown = function (e) {
+  if (e.key === 'Enter') tryGuess();
+};
+
+startOver();
+</script>
+
+</body>
+</html>
